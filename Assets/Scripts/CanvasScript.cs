@@ -62,7 +62,7 @@ public class CanvasScript : MonoBehaviour
     /// <param name="message">The received message.</param>
     private void OnMessageReceived(string message)
     {
-       MessageText.text = message;
+        MessageText.text = message;
     }
 
     /// <summary>
