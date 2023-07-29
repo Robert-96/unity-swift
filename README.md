@@ -17,32 +17,13 @@ Follow the instructions below to set up the plugin and integrate it into your Un
 1. Open the Unity project where you want to integrate the Swift plugin.
 1. Copy the entire `Assets/Plugins/iOS` folder from this repository into your Unity project's `Assets/Plugins` folder.
 
-## Usage
-
-### How to call Unity methods from Swift
-
-To call Unity methods from Swift, use `UnitySendMessage` function like below:
-
-```swift
-// SwiftToUnity.swift
-import Foundation
-
-@objc public class SwiftToUnity: NSObject {
-    @objc public static let shared = SwiftToUnity()
-
-    /// Sends a "Hello World" message to the "Canvas" GameObject by calling the "OnMessageReceived" script method on that object with the "Hello World!" message.
-    @objc public func swiftSendHelloWorldMessage() {
-        // The UnitySendMessage function has three parameters: the name of the target GameObject, the script method to call on that object and the message string to pass to the called method.
-        UnitySendMessage("Canvas", "OnMessageReceived", "Hello World!");
-    }
-}
-```
-
-See [SwiftToUnity.swift](Assets/Plugins/iOS/SwiftToUnity/Source/SwiftToUnity.swift).
+## Create a Unity plug-in from scratch
 
 ### How to call Swift methods from Unity
 
 #### **Step 1**: Create your Swift classes
+
+Add the following code into `Assets/Plugins/iOS/SwiftToUnity/Source/SwiftToUnity.swift`:
 
 ```swift
 import Foundation
@@ -59,10 +40,13 @@ import Foundation
 }
 ```
 
+Note that here `@obc` instructs Swift to make classes or methods available to Objective-C as well as Swift code.
+
 #### **Step 2**: Create a `.mm` bridge file
 
+Add the following code into `Assets/Plugins/iOS/SwiftToUnity/Source/SwiftToUnityBridge.mm`:
+
 ```objc
-// SwiftToUnityBridge.mm
 #import <UnityFramework/UnityFramework-Swift.h>
 #import "UnityInterface.h"
 
@@ -89,10 +73,13 @@ extern "C"
         return cStringCopy([returnString UTF8String]);
     }
 }
-
 ```
 
+The `SwiftToUnityBridge.mm` file is the bridging medium between Swift and Unity.
+
 #### **Step 3**: Add ``UnityFramework.modulemap``
+
+Add the following code into `Assets/Plugins/iOS/SwiftToUnity/Source/UnityFramework.modulemap`:
 
 ```objc
 framework module UnityFramework {
@@ -110,6 +97,12 @@ framework module UnityFramework {
 ```
 
 #### **Step 4**: Add ``SwiftToUnityPostProcess.cs`` script
+
+First, you will need to add the [PostProcessing](https://docs.unity3d.com/2022.3/Documentation/Manual/com.unity.postprocessing.html) package to your Unity project.
+
+To install the package, go to **Window > Package Manager** and switch the view from **In Project** to **All**. Select **Post Processing** in the list. In the right panel you'll find information about the package and a button to install or update to the latest available version for the version of Unity you are running.
+
+Now add the following code into `Assets/Plugins/iOS/SwiftToUnity/Editor/SwiftToUnityPostProcess.cs`:
 
 ```csharp
 #if UNITY_IOS
@@ -192,6 +185,29 @@ public class CanvasScript : MonoBehaviour
     }
 }
 ```
+
+### How to call Unity methods from Swift
+
+To call Unity methods from Swift, use `UnitySendMessage` function like below:
+
+```swift
+// SwiftToUnity.swift
+import Foundation
+
+@objc public class SwiftToUnity: NSObject {
+    @objc public static let shared = SwiftToUnity()
+
+    /// Sends a "Hello World" message to the "Canvas" GameObject by calling the "OnMessageReceived" script method on that object with the "Hello World!" message.
+    @objc public func swiftSendHelloWorldMessage() {
+        // The UnitySendMessage function has three parameters: the name of the target GameObject, the script method to call on that object and the message string to pass to the called method.
+        UnitySendMessage("Canvas", "OnMessageReceived", "Hello World!");
+    }
+}
+```
+
+See [SwiftToUnity.swift](Assets/Plugins/iOS/SwiftToUnity/Source/SwiftToUnity.swift).
+
+For more information about `UnitySendMessage`, check out [Unity's Documentation](https://docs.unity3d.com/Manual/PluginsForIOS.html).
 
 ## License
 
