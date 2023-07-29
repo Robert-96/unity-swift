@@ -3,7 +3,7 @@ import Foundation
 @objc public class SwiftToUnity: NSObject {
     @objc public static let shared = SwiftToUnity()
 
-    /// Sends a "Hello World" message to the "Canvas" GameObject and calls the "OnMessageReceived" script method on that object with the "Hello World!" message.
+    /// Sends a "Hello World" message to the "Canvas" GameObject by calling the "OnMessageReceived" script method on that object with the "Hello World!" message.
     @objc public func swiftSendHelloWorldMessage() {
         // The UnitySendMessage function has three parameters: the name of the target GameObject, the script method to call on that object and the message string to pass to the called method.
         UnitySendMessage("Canvas", "OnMessageReceived", "Hello World!");
