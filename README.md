@@ -42,7 +42,7 @@ See [SwiftToUnity.swift](Assets/Plugins/iOS/SwiftToUnity/Source/SwiftToUnity.swi
 
 ### How to call Swift methods from Unity
 
-#### **Step 1**: Create your Swift classes.
+#### **Step 1**: Create your Swift classes
 
 ```swift
 import Foundation
@@ -94,7 +94,7 @@ extern "C"
 
 #### **Step 3**: Add ``UnityFramework.modulemap``
 
-```
+```objc
 framework module UnityFramework {
   umbrella header "UnityFramework.h"
 
